@@ -1,10 +1,13 @@
 Package: manhattan
 Type: Package
-Title: What the Package Does (Title Case)
+Title: Produce manhattan plot
 Version: 0.1
 Date: 2015-02-27
-Author: Who wrote it
-Maintainer: Who to complain to <yourfault@somewhere.net>
-Description: More about what it does (maybe more than one line)
-License: What license is it under?
+Author: Charles Joly Beauparlant
+Maintainer: Charles Joly Beauparlatn
+  <Charles.Joly-Beauparlant@crchul.ulaval.ca>
+Description: This package allow to produce a manhattan plot with a GRanges
+  object.
+License: Artistic 2.0
 LazyData: TRUE
+Imports: GenomicRanges, ggplot2
