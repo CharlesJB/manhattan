@@ -10,4 +10,4 @@ Description: This package allow to produce a manhattan plot with a GRanges
   object.
 License: Artistic 2.0
 LazyData: TRUE
-Imports: GenomicRanges, ggplot2
+Imports: GenomicRanges, ggbio
