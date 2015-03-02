@@ -31,7 +31,7 @@ manhattan <- function(gr_snps, title, pvalue = NULL, status = NULL, r2 = NULL,
     gr_snps$r2 <- GenomicRanges::mcols(gr_snps)[[r2]]
   }
   if (!is.null(geno_ld)) {
-    gr_snps$r2 <- add_r2_from_vcftool(geno_ld = geno_ld, gr_snps = gr_snps,
+    gr_snps$r2 <- add_r2_from_vcftools(geno_ld = geno_ld, gr_snps = gr_snps,
                     pvalue = pvalue, status = status)
     r2 = "r2"
   }
