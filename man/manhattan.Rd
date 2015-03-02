@@ -4,7 +4,8 @@
 \alias{manhattan}
 \title{Produce a manhattan plot.}
 \usage{
-manhattan(gr_snps, title, pvalue = NULL, status = NULL, r2 = NULL)
+manhattan(gr_snps, title, pvalue = NULL, status = NULL, r2 = NULL,
+  geno_ld = NULL)
 }
 \arguments{
 \item{gr_snps}{A \code{GRanges} object.}
@@ -12,11 +13,14 @@ manhattan(gr_snps, title, pvalue = NULL, status = NULL, r2 = NULL)
 \item{title}{The title of the plot.}
 
 \item{pvalue}{The name of the column to use as pvalue. Default: NULL (the
- first numerical metadata column will be used)}
+first numerical metadata column will be used)}
 
 \item{status}{Name of the column for the SNP status (Genotype or Imputed)}
 
 \item{r2}{The name of the column to use for showing r2. Default: NULL.}
+
+\item{geno_ld}{The file *.geno.ld produced by `vcftools` or a
+  \code{data.frame} from the file loaded with read.table.}
 }
 \value{
 \code{} corresponding to the input file table.

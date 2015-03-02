@@ -4,8 +4,10 @@
 #' @param title The title of the plot.
 #' @param pvalue The name of the column to use as pvalue. Default: NULL (the
 #'   first numerical metadata column will be used)
-#'  @param status Name of the column for the SNP status (Genotype or Imputed)
-#'  @param r2 The name of the column to use for showing r2. Default: NULL.
+#' @param status Name of the column for the SNP status (Genotype or Imputed)
+#' @param r2 The name of the column to use for showing r2. Default: NULL.
+#' @param geno_ld The file *.geno.ld produced by `vcftools` or a
+#'   \code{data.frame} from the file loaded with read.table.
 #'
 #' @return \code{} corresponding to the input file table.
 #'
@@ -13,7 +15,9 @@
 #' dataset <- load_dataset()
 #'
 #' @export
-manhattan <- function(gr_snps, title, pvalue = NULL, status = NULL, r2 = NULL) {
+manhattan <- function(gr_snps, title, pvalue = NULL, status = NULL, r2 = NULL,
+                      geno_ld = NULL) {
+  # TODO: Add parameter validity tests
   # Name the metadata column correctly
   if (is.null(pvalue)) {
     i <- min(which(sapply(GenomicRanges::mcols(gr_snps), is.numeric)))
@@ -25,6 +29,11 @@ manhattan <- function(gr_snps, title, pvalue = NULL, status = NULL, r2 = NULL) {
   }
   if (!is.null(r2)) {
     gr_snps$r2 <- GenomicRanges::mcols(gr_snps)[[r2]]
+  }
+  if (!is.null(geno_ld)) {
+    gr_snps$r2 <- add_r2_from_vcftool(geno_ld = geno_ld, gr_snps = gr_snps,
+                    pvalue = pvalue, status = status)
+    r2 = "r2"
   }
 
   ## Produce the manhattan plot
