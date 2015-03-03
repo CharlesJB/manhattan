@@ -8,6 +8,8 @@
 #' @param r2 The name of the column to use for showing r2. Default: NULL.
 #' @param geno_ld The file *.geno.ld produced by `vcftools` or a
 #'   \code{data.frame} from the file loaded with read.table.
+#' @param extra_ggplot2 Extra modifications to add to the graph. Must be
+#'   valid ggplot2 expressions.
 #'
 #' @return \code{} corresponding to the input file table.
 #'
@@ -16,7 +18,7 @@
 #'
 #' @export
 manhattan <- function(gr_snps, title, pvalue = NULL, status = NULL, r2 = NULL,
-                      geno_ld = NULL) {
+                      geno_ld = NULL, extra_ggplot2 = NULL) {
   # TODO: Add parameter validity tests
   # Name the metadata column correctly
   if (is.null(pvalue)) {
@@ -59,7 +61,11 @@ manhattan <- function(gr_snps, title, pvalue = NULL, status = NULL, r2 = NULL,
     ggplot2::ylab(paste0("-log(", pvalue, ")"))
 
   # Return plot
-  p
+  if (is.null(extra_ggplot2)) {
+    p
+  } else {
+    p + extra_ggplot2
+  }
 }
 
 get_aes <- function(status, r2) {

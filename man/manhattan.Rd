@@ -5,7 +5,7 @@
 \title{Produce a manhattan plot.}
 \usage{
 manhattan(gr_snps, title, pvalue = NULL, status = NULL, r2 = NULL,
-  geno_ld = NULL)
+  geno_ld = NULL, extra_ggplot2 = NULL)
 }
 \arguments{
 \item{gr_snps}{A \code{GRanges} object.}
@@ -20,7 +20,10 @@ first numerical metadata column will be used)}
 \item{r2}{The name of the column to use for showing r2. Default: NULL.}
 
 \item{geno_ld}{The file *.geno.ld produced by `vcftools` or a
-  \code{data.frame} from the file loaded with read.table.}
+\code{data.frame} from the file loaded with read.table.}
+
+\item{extra_ggplot2}{Extra modifications to add to the graph. Must be
+  valid ggplot2 expressions.}
 }
 \value{
 \code{} corresponding to the input file table.
