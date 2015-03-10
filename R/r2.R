@@ -66,8 +66,8 @@ add_r2_from_vcftools <- function(geno_ld, gr_snps, pvalue = NULL,
 
   ## 4. Add r2 value to gr_snps
   overlaps <- GenomicRanges::findOverlaps(gr_snps, subset_R2)
-  j <- GenomicRanges::queryHits(overlaps)
-  k <- GenomicRanges::subjectHits(overlaps)
+  j <- IRanges::queryHits(overlaps)
+  k <- IRanges::subjectHits(overlaps)
   r2 <- 1
   r2[j] <- subset_R2$R2[k]
 
