@@ -20,6 +20,7 @@
 manhattan <- function(gr_snps, title, pvalue = NULL, status = NULL, r2 = NULL,
                       geno_ld = NULL, extra_ggplot2 = NULL) {
   # TODO: Add parameter validity tests
+  # Status should be genotype or imputed only
   # Name the metadata column correctly
   if (is.null(pvalue)) {
     i <- min(which(sapply(GenomicRanges::mcols(gr_snps), is.numeric)))
@@ -27,7 +28,10 @@ manhattan <- function(gr_snps, title, pvalue = NULL, status = NULL, r2 = NULL,
   }
   gr_snps$pvalue <- GenomicRanges::mcols(gr_snps)[[pvalue]]
   if (!is.null(status)) {
-    gr_snps$status <- GenomicRanges::mcols(gr_snps)[[status]]
+    i <- grepl("genotyped", GenomicRanges::mcols(gr_snps)[[status]],
+               ignore.case = TRUE)
+    gr_snps$status <- 21
+    gr_snps$status[i] <- 24
   }
   if (!is.null(r2)) {
     gr_snps$r2 <- GenomicRanges::mcols(gr_snps)[[r2]]
@@ -41,23 +45,29 @@ manhattan <- function(gr_snps, title, pvalue = NULL, status = NULL, r2 = NULL,
   ## Produce the manhattan plot
   # Prepare aesthetic
   aesthetic <- get_aes(status = status, r2 = r2)
+  points <- get_geom_point()
 
   # Prepare basic plot
   p <- ggbio::ggplot(gr_snps, aesthetic) +
-    ggplot2::geom_point(size = 3) +
+    points +
     ggplot2::theme_bw()
+
+  # Add shape (if necessary)
+  if (!is.null(status)) {
+    p <- p + ggplot2::scale_shape_identity(guide = "legend", breaks = c(21,24),
+                                           labels = c("Imputed", "Genotyped"))
+  }
 
   # Add color gradient (if necessary)
   if (!is.null(r2)) {
-    p <- p + ggplot2::scale_color_continuous(low = "#E6E6E6",
-                                             high = "steelblue")
+    p <- p + ggplot2::scale_fill_continuous(low = "white", high = "red")
   }
 
   # Add labels
   chr <- unique(GenomicRanges::seqnames(gr_snps))
   stopifnot(length(chr) == 1)
   p <- p + ggplot2::ggtitle(title) +
-    ggplot2::xlab(paste0("Position on ", chr)) +
+    ggplot2::xlab(paste0("Position on ", chr), " (bp)") +
     ggplot2::ylab(paste0("-log(", pvalue, ")"))
 
   # Return plot
@@ -73,13 +83,29 @@ get_aes <- function(status, r2) {
     if (is.null(r2)) {
       ggplot2::aes(x = start, y = -log10(pvalue))
     } else {
-      ggplot2::aes(x = start, y = -log10(pvalue), color = r2)
+      ggplot2::aes(x = start, y = -log10(pvalue), fill = r2)
     }
   } else {
     if (is.null(r2)) {
       ggplot2::aes(x = start, y = -log10(pvalue), shape = status)
     } else {
-      ggplot2::aes(x = start, y = -log10(pvalue), shape = status, color = r2)
+      ggplot2::aes(x = start, y = -log10(pvalue), shape = status, fill = r2)
+    }
+  }
+}
+
+get_geom_point <- function(status, r2) {
+  if (is.null(status)) {
+    if (is.null(r2)) {
+      ggplot2::geom_point(shape = 21, fill = "white", color = "black", size = 3)
+    } else {
+      ggplot2::geom_point(shape = 21, color = "black", size = 3)
+    }
+  } else {
+    if (is.null(r2)) {
+      ggplot2::geom_point(fill = "white", color = "black", size = 3)
+    } else {
+      ggplot2::geom_point(color = "black", size = 3)
     }
   }
 }
