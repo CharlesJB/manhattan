@@ -45,7 +45,7 @@ manhattan <- function(gr_snps, title, pvalue = NULL, status = NULL, r2 = NULL,
   ## Produce the manhattan plot
   # Prepare aesthetic
   aesthetic <- get_aes(status = status, r2 = r2)
-  points <- get_geom_point()
+  points <- get_geom_point(status = status, r2 = r2)
 
   # Prepare basic plot
   p <- ggbio::ggplot(gr_snps, aesthetic) +
