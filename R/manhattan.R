@@ -67,7 +67,7 @@ manhattan <- function(gr_snps, title, pvalue = NULL, status = NULL, r2 = NULL,
   chr <- unique(GenomicRanges::seqnames(gr_snps))
   stopifnot(length(chr) == 1)
   p <- p + ggplot2::ggtitle(title) +
-    ggplot2::xlab(paste0("Position on ", chr), " (bp)") +
+    ggplot2::xlab(paste0("Position on ", chr, " (bp)")) +
     ggplot2::ylab(paste0("-log(", pvalue, ")"))
 
   # Return plot
